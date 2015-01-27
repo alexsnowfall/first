@@ -1,0 +1,38 @@
+#!/usr/bin/expect
+set ip [lindex $argv 0];
+set u [lindex $argv 1];
+set db [lindex $argv 2];
+set UNIBOX "unibox"
+switch -regexp -- $u {
+        {u} { set user "unibox";
+        }
+        {w} { set user "wifilan";
+        }
+        {h} { set user "hotspotclick";
+        }
+        {c} { set user "cloudap";
+        }
+        {s} { set user "smartap";
+        }
+        default { set user "unibox";
+        }
+}
+spawn ssh $ip -l $user
+expect "password: "
+if {$user == $UNIBOX} {
+        send "Awes0meUn1b0x123#\r"
+} else {
+        send "wifi123#\r"
+}
+
+expect "$ "
+if {$db == 1} {
+        send "mysql -u root -p\r"
+        expect "password: "
+        if {$user == $UNIBOX} {
+                send "wifi123#412202\r"
+        } else {
+        send "wifi123#\r"
+        }
+}
+interact
